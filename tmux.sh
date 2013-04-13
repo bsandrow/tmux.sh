@@ -97,6 +97,8 @@ new_session_name()
 
 if [ -z "$1" ]; then
     die_with_usage "SESSION-NAME is mandatory"
+elif [ "$1" = "-h" -o "$1" = "--help" ]; then
+    die_with_usage
 else
     export TMUX_SESSION_NAME="$1"
 fi
