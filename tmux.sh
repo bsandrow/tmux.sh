@@ -17,29 +17,82 @@ die_with_usage()
     exit 1
 }
 
+base_session_exists()
+{
+    tmux_session_exists "$TMUX_SESSION_NAME"
+}
+
 tmux_session_exists()
 {
-    tmux has-session -t "$TMUX_SESSION_NAME"
+    session_name="$1"
+    tmux has-session -t "$session_name"
+}
+
+base_session_is_free()
+{
+    tmux_session_has_clients_attached "$TMUX_SESSION_NAME"
+    [ "$?" != "0" ]
+}
+
+create_base_session()
+{
+    tmux new-session -s  "$TMUX_SESSION_NAME"
 }
 
 tmux_session_has_clients_attached()
 {
-    [ $(tmux list-clients -t "$TMUX_SESSION_NAME" | wc -l) -gt 0 ]
+    session_name="$1"
+    [ $(tmux list-clients -t "$session_name" | wc -l) -gt 0 ]
 }
 
-tmux_create_grouped_session()
+find_available_slave_session()
 {
-    tmux new-session -t "$TMUX_SESSION_NAME"
+    list_slave_sessions | while read session_name; do
+        if ! tmux_session_has_clients_attached "$session_name"; then
+            echo "%$session_name%"
+            exit
+        fi
+    done
+}
+
+get_slave_session_name()
+{
+    # Look through existing slave sessions for one without a client attached
+    session_name=$(find_available_slave_session)
+    if [ -n "$session_name" ]; then
+        return
+    fi
+
+    # we couldn't find an existing session to use, so create one, and return
+    # the name
+    session_name="$(new_session_name)"
+    tmux new-session -d -t "$TMUX_SESSION_NAME" -s "$session_name"
+    echo "$session_name"
+    return
 }
 
 tmux_attach_to_session()
 {
-    tmux attach-session -t "$TMUX_SESSION_NAME"
+    session_name="$1"
+    tmux attach-session -t "$session_name"
 }
 
-tmux_create_new_session()
+list_slave_sessions()
 {
-    tmux new-session -s  "$TMUX_SESSION_NAME"
+    tmux list-sessions | grep '^'"$TMUX_SESSION_NAME"'-[[:digit:]]\+' | cut -d: -f1
+}
+
+tmux_slave_session_next_number()
+{
+    max_number=$(list_slave_sessions | sed -e 's/^.*-\([[:digit:]]\+\)$/\1/' | sort -nr | head -1)
+    [ -n "$max_number" ] || max_number=0
+    echo  "$max_number" + 1 | bc
+}
+
+new_session_name()
+{
+    next_number=$(tmux_slave_session_next_number)
+    echo "$TMUX_SESSION_NAME-$next_number"
 }
 
 if [ -z "$1" ]; then
@@ -48,12 +101,12 @@ else
     export TMUX_SESSION_NAME="$1"
 fi
 
-if tmux_session_exists; then
-    if tmux_session_has_clients_attached; then
-        tmux_create_grouped_session
+if base_session_exists; then
+    if base_session_is_free; then
+        tmux_attach_to_session "$TMUX_SESSION_NAME"
     else
-        tmux_attach_to_session
+        tmux_attach_to_session "$(get_slave_session_name)"
     fi
 else
-    tmux_create_new_session
+    create_base_session
 fi
