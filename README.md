@@ -80,3 +80,8 @@ to be setup initially, just modify the create_base_session function to setup
 your customizations (e.g. create windows, rename them, lauch processes, etc)
 and leave the rest alone. You may want to just rename `tmux.sh` to something
 else with a better name, but that's about it.
+
+## References
+
+* [Unix & Linux Stack Exchange: tmux - attach to different windows in a session][http://unix.stackexchange.com/questions/24274/attach-to-different-windows-in-session]
+* [tmux manpage][http://linux.die.net/man/1/tmux]
