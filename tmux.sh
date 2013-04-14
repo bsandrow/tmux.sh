@@ -49,7 +49,7 @@ find_available_slave_session()
 {
     list_slave_sessions | while read session_name; do
         if ! tmux_session_has_clients_attached "$session_name"; then
-            echo "%$session_name%"
+            echo "$session_name"
             exit
         fi
     done
