@@ -56,8 +56,9 @@ separate, but linked `sessions`. Since each `session` has its own 'active
 window' attribute, this allows each `client` to switch `windows` independent of
 the others.
 
- - [1] Note that the functionality is all built into tmux. This script just exposes it in a more user-friendly fashion.
- - [2] GNU screen's archicture is setup so that each 'screen session' is a completely separate process. In terms of the tmux architecture, it would be like having a new server with a single session for every collection of windows.
+[1] Note that the functionality is all built into tmux. This script just exposes it in a more user-friendly fashion.
+
+[2] GNU screen's archicture is setup so that each 'screen session' is a completely separate process. In terms of the tmux architecture, it would be like having a new server with a single session for every collection of windows.
 
 ## Usage
 
