@@ -17,6 +17,28 @@ in-depth explanation.
 
 * tmux 1.8+ (session grouping was introduced in tmux 1.8)
 
+## Usage
+
+Usage is meant to be brain-dead simple. Just run `tmux.sh` with a session name:
+
+    $ tmux.sh my-session
+
+Running it a second time from a second terminal will create a session grouped
+with my-session, and connect to that session.
+
+The session names (other than the initial session) all follow the pattern:
+`SESSION_NAME-##`. If you try to connect an additional client, any sessions
+matching this pattern will be 'reclaimed' if there are currently no clients
+attached to them.
+
+## Customization
+
+This is pretty easy to customize. If you have a specific session that you want
+to be setup initially, just modify the create_base_session function to setup
+your customizations (e.g. create windows, rename them, lauch processes, etc)
+and leave the rest alone. You may want to just rename `tmux.sh` to something
+else with a better name, but that's about it.
+
 ## Explanation
 
 tmux has a slightly different architecture than GNU screen, which leads to the
@@ -59,28 +81,6 @@ the others.
 [1] Note that the functionality is all built into tmux. This script just exposes it in a more user-friendly fashion.
 
 [2] GNU screen's archicture is setup so that each 'screen session' is a completely separate process. In terms of the tmux architecture, it would be like having a new server with a single session for every collection of windows.
-
-## Usage
-
-Usage is meant to be brain-dead simple. Just run `tmux.sh` with a session name:
-
-    $ tmux.sh my-session
-
-Running it a second time from a second terminal will create a session grouped
-with my-session, and connect to that session.
-
-The session names (other than the initial session) all follow the pattern:
-`SESSION_NAME-##`. If you try to connect an additional client, any sessions
-matching this pattern will be 'reclaimed' if there are currently no clients
-attached to them.
-
-## Customization
-
-This is pretty easy to customize. If you have a specific session that you want
-to be setup initially, just modify the create_base_session function to setup
-your customizations (e.g. create windows, rename them, lauch processes, etc)
-and leave the rest alone. You may want to just rename `tmux.sh` to something
-else with a better name, but that's about it.
 
 ## References
 
