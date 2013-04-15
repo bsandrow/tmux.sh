@@ -11,7 +11,7 @@ and switch windows indepentendly from each other. A common use-case for this is
 to have a single session with a bunch of windows, and connect two separate
 terminals, each looking at a different window in the same session (e.g. vim on
 one terminal, and scrolling server output on another). See below a more
-in-depth explanation.
+[in-depth explanation](#explanation).
 
 ## Requirements
 
