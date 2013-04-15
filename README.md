@@ -35,25 +35,25 @@ behaviour this script seeks to remedy[1]. The tmux architecture looks like this:
     +---------+   +---------+ +---------+
 
 The `server` is the back-end process that is parent to all of the processes
-that are running in tmux. The `session`s are collections of `window`s running
-on the `server`. The `client`s are terminals that are connected to the `server`
+that are running in tmux. The `sessions` are collections of `windows` running
+on the `server`. The `clients` are terminals that are connected to the `server`
 (over the Unix socket, which is configurable with the `-s` tmux option). Each
 `client` connects to a specific `session` on the `server`.
 
 The trouble comes about because the 'active window' is an attribute of the
-`session`, so when two `client`s connect to the same `session` they can only
+`session`, so when two `clients` connect to the same `session` they can only
 ever view the same `window` at the same time (e.g. when `client1` switches from
-one `window` to another, `client2` also switches `window`s). This can be
+one `window` to another, `client2` also switches `windows`). This can be
 surprising to people switching from GNU screen, because if you connect to the
 same screen session[2] twice, you can switch windows independently.
 
 tmux 1.8 remedied this by adding a `-t target-session` option to the
-`new-session` command. This allows you to 'group' multiple `session`s together,
-so that they share the same collection of `window`s (i.e. when you remove a
-`window` from one `session` in the group, it's removed from all `session`s in
-the group; ditto for creating a `window`). Now the two `client`s can connect to
-separate, but linked `session`s. Since each `session` has its own 'active
-window' attribute, this allows each `client` to switch `window`s independent of
+`new-session` command. This allows you to 'group' multiple `sessions` together,
+so that they share the same collection of `windows` (i.e. when you remove a
+`window` from one `session` in the group, it's removed from all `sessions` in
+the group; ditto for creating a `window`). Now the two `clients` can connect to
+separate, but linked `sessions`. Since each `session` has its own 'active
+window' attribute, this allows each `client` to switch `windows` independent of
 the others.
 
  - [1] Note that the functionality is all built into tmux. This script just exposes it in a more user-friendly fashion.
@@ -83,5 +83,5 @@ else with a better name, but that's about it.
 
 ## References
 
-* [Unix & Linux Stack Exchange: tmux - attach to different windows in a session][http://unix.stackexchange.com/questions/24274/attach-to-different-windows-in-session]
-* [tmux manpage][http://linux.die.net/man/1/tmux]
+* [Unix & Linux Stack Exchange: tmux - attach to different windows in a session](http://unix.stackexchange.com/questions/24274/attach-to-different-windows-in-session)
+* [tmux manpage](http://linux.die.net/man/1/tmux)
