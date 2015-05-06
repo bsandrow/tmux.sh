@@ -25,7 +25,7 @@ base_session_exists()
 tmux_session_exists()
 {
     session_name="$1"
-    tmux has-session -t "$session_name"
+    tmux has-session -t "$session_name" 2>/dev/null
 }
 
 base_session_is_free()
